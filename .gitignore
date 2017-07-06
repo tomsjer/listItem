@@ -1,0 +1,9 @@
+node_modules/
+*.pem
+*.sublime-workspace
+*.sublime-project
+sftp-config.json
+public/css/
+public/js/
+uploads/
+.tmp/

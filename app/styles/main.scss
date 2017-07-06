@@ -1,0 +1,85 @@
+@import 'variables';
+* {
+    box-sizing: border-box;
+    font-family: sans-serif;
+    font-size: 16px;
+}
+
+html,
+body {
+    background: $bg;
+    color: $fg;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+  min-height: 100%;
+}
+button:not([type="submit"]) {
+  display: none;
+}
+.item {
+    // display: none;
+    width: 66.66%;
+    position: relative;
+    float: right;
+    margin-top: 10%;
+
+    img {
+      position: relative;
+      margin: auto;
+      display: block;
+      margin-bottom: 32px;
+    }
+
+    p {
+      width:  320px;
+      position: relative;
+      margin: auto;
+      display: block;
+    }
+}
+
+.list {
+    
+    width: 33.33%;
+    height: 100%;
+    position: relative;
+    float: left;
+    overflow-y: scroll;
+    
+    .item-list {
+        border: solid 1px #333;
+        overflow: hidden;
+        opacity: 0.8;
+        cursor: pointer;
+
+        img {
+          width: 100px;
+          height: 100px;
+          position: relative;
+          float: left;
+        }
+
+        p {
+          width: calc(100% - 100px);
+          height: 100px;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          position: relative;
+          float: left;
+          margin: 0;
+          padding: 8px;
+          font-weight: 100;
+          font-size: 14px;
+          color: #ccc;
+        }
+
+      &.active, &:hover {
+        opacity: 1;
+      }
+    }
+}
