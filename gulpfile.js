@@ -28,6 +28,7 @@ const config = require('./config.json');
 const srcDir = config.srcDir;
 const scriptsDir = `${srcDir}/scripts`;
 const stylesDir = `${srcDir}/styles`;
+const templatesDir = `${srcDir}/templates`;
 const tmpDir = `${__dirname}/.tmp`;
 const publicDir = config.publicDir;
 const serverDir = config.serverDir;
@@ -75,6 +76,7 @@ gulp.task('serve', ['js', 'concat-styles', 'server'], ()=>{
   gulp.watch(`${serverDir}/*.js`, ['kill-server', 'server']);
   gulp.watch(`${configFile}`, ['kill-server', 'server', 'js-watch']);
   gulp.watch(`${scriptsDir}/**/**/*.js`, ['js-watch']);
+  gulp.watch(`${templatesDir}/**/**/*.hbs`, ['js-watch']);
   gulp.watch(`${stylesDir}/**/*.scss`, ['sass-watch']);
   gulp.watch(`${publicDir}/*.html`, ()=>{ reload(); });
 });

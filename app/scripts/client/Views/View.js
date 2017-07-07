@@ -4,7 +4,9 @@ export default class View extends EventEmitter {
   constructor(opts) {
     super(opts);
 
+    this.noUpdate = opts.noUpdate || false;
     this.container = opts.container;
+    this.model = opts.model;
     this.events = opts.events;
     this.template = opts.template;
 
@@ -13,18 +15,33 @@ export default class View extends EventEmitter {
     this.on('beforeDestroy', this.unbindEvents);
   }
   update(prop) {
+    if (this.noUpdate) { return; }
     this.destroy();
     this.render();
   }
   render() {
-    this.emit('beforeRender');
-    this.container.innerHTML = this.template(this.model.getJSON());
-    this.emit('afterRender');
+    const container = typeof this.container === 'string' ?
+                      document.querySelector(this.container) : this.container;
+    if (container) {
+      this.emit('beforeRender');
+      container.innerHTML = this.template(this.model.getJSON());
+      this.emit('afterRender');
+    }
+    else {
+      console.log(this, 'container is null');
+    }
   }
   destroy() {
-    this.emit('beforeDestroy');
-    this.container.innerHTML = '';
-    this.emit('afterDestroy');
+    const container = typeof this.container === 'string' ?
+                      document.querySelector(this.container) : this.container;
+    if (container) {
+      this.emit('beforeDestroy');
+      container.innerHTML = '';
+      this.emit('afterDestroy');
+    }
+    else {
+      console.log(this, 'container is null');
+    }
   }
   bindEvents() {
     for (const i in this.events) {
