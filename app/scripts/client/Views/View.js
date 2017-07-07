@@ -4,7 +4,9 @@ export default class View extends EventEmitter {
   constructor(opts) {
     super(opts);
 
+    this.noUpdate = opts.noUpdate || false;
     this.container = opts.container;
+    this.model = opts.model;
     this.events = opts.events;
     this.template = opts.template;
 
@@ -13,18 +15,33 @@ export default class View extends EventEmitter {
     this.on('beforeDestroy', this.unbindEvents);
   }
   update(prop) {
+    if (this.noUpdate) { return; }
     this.destroy();
     this.render();
   }
   render() {
-    this.emit('beforeRender');
-    this.container.innerHTML = this.template(this.model.getJSON());
-    this.emit('afterRender');
+    const container = typeof this.container === 'string' ?
+                      document.querySelector(this.container) : this.container;
+    if (container) {
+      this.emit('beforeRender');
+      container.innerHTML = this.template(this.model.getJSON());
+      this.emit('afterRender');
+    }
+    else {
+      console.log(this, 'container is null');
+    }
   }
   destroy() {
-    this.emit('beforeDestroy');
-    this.container.innerHTML = '';
-    this.emit('afterDestroy');
+    const container = typeof this.container === 'string' ?
+                      document.querySelector(this.container) : this.container;
+    if (container) {
+      this.emit('beforeDestroy');
+      container.innerHTML = '';
+      this.emit('afterDestroy');
+    }
+    else {
+      console.log(this, 'container is null');
+    }
   }
   bindEvents() {
     for (const i in this.events) {
@@ -32,9 +49,12 @@ export default class View extends EventEmitter {
       const selector = `[data-bind="${arr[0]}"]`;
       const event = arr[1];
       const handler = typeof this.events[i] === 'function' ? this.events[i] : this[this.events[i]];
-    
-      this.container.querySelector(selector)
-      .addEventListener(event, handler.bind(this));
+      const container = typeof this.container === 'string' ?
+                      document.querySelector(this.container) : this.container;
+      const el = container.querySelector(selector);
+      if(el) {
+        el.addEventListener(event, handler.bind(this));
+      }
     }
   }
   unbindEvents() {
@@ -43,7 +63,9 @@ export default class View extends EventEmitter {
       const selector = `[data-bind="${arr[0]}"]`;
       const event = arr[1];
       const handler = typeof this.events[i] === 'function' ? this.events[i] : this[this.events[i]];
-      const el = this.container.querySelector(selector);
+      const container = typeof this.container === 'string' ?
+                      document.querySelector(this.container) : this.container;
+      const el = container.querySelector(selector);
       if(el) {
         el.removeEventListener(event, handler);
       }
