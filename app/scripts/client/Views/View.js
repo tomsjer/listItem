@@ -12,7 +12,7 @@ export default class View extends EventEmitter {
     this.on('afterRender', this.bindEvents);
     this.on('beforeDestroy', this.unbindEvents);
   }
-  update() {
+  update(prop) {
     this.destroy();
     this.render();
   }
@@ -31,8 +31,10 @@ export default class View extends EventEmitter {
       const arr = i.split(':');
       const selector = `[data-bind="${arr[0]}"]`;
       const event = arr[1];
+      const handler = typeof this.events[i] === 'function' ? this.events[i] : this[this.events[i]];
+    
       this.container.querySelector(selector)
-      .addEventListener(event, this[this.events[i]]);
+      .addEventListener(event, handler.bind(this));
     }
   }
   unbindEvents() {
@@ -40,8 +42,11 @@ export default class View extends EventEmitter {
       const arr = i.split(':');
       const selector = `[data-bind="${arr[0]}"]`;
       const event = arr[1];
-      this.container.querySelector(selector)
-      .removeEventListener(event, this[this.events[i]]);
+      const handler = typeof this.events[i] === 'function' ? this.events[i] : this[this.events[i]];
+      const el = this.container.querySelector(selector);
+      if(el) {
+        el.removeEventListener(event, handler);
+      }
     }
   }
   setModel(model) {

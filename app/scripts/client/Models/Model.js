@@ -7,7 +7,7 @@ export default class Model extends EventEmitter {
   }
   set(attr, value) {
     this.attributes[attr] = value;
-    this.emit('change');
+    this.emit('change', attr);
   }
   get(attr) {
     return this.attributes[attr];

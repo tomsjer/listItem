@@ -17,7 +17,7 @@ export default class Controller extends EventEmitter {
   updateModel(attribute, value) {
     this.model.set(attribute, value);
   }
-  updateView() {
-    this.view.update();
+  updateView(prop) {
+    this.view.update(prop);
   }
 }
