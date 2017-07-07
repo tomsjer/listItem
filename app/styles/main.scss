@@ -21,29 +21,8 @@ body {
 button:not([type="submit"]) {
   display: none;
 }
-.item {
-    // display: none;
-    width: 66.66%;
-    position: relative;
-    float: right;
-    margin-top: 10%;
 
-    img {
-      position: relative;
-      margin: auto;
-      display: block;
-      margin-bottom: 32px;
-    }
-
-    p {
-      width:  320px;
-      position: relative;
-      margin: auto;
-      display: block;
-    }
-}
-
-.list {
+aside.item-list {
     
     width: 33.33%;
     height: 100%;
@@ -51,7 +30,7 @@ button:not([type="submit"]) {
     float: left;
     overflow-y: scroll;
     
-    .item-list {
+    .item {
         border: solid 1px #333;
         overflow: hidden;
         opacity: 0.8;
@@ -83,3 +62,26 @@ button:not([type="submit"]) {
       }
     }
 }
+
+main {
+  // display: none;
+  width: 66.66%;
+  position: relative;
+  float: right;
+  margin-top: 10%;
+
+  img {
+    position: relative;
+    margin: auto;
+    display: block;
+    margin-bottom: 32px;
+  }
+
+  p {
+    width:  320px;
+    position: relative;
+    margin: auto;
+    display: block;
+  }
+}
+

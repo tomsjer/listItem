@@ -13,7 +13,7 @@ export default class App {
     });
 
     this.view = new View({
-      noUpdate: true,
+      // noUpdate: true,
       model: this.model,
       container: document.querySelector('body'),
       events: {
@@ -33,7 +33,16 @@ export default class App {
     });
 
     setTimeout(()=>{
-      this.controller.model.set('items',[0,1,2,3])
-    }, 1000);
+      this.controller.model.set('loading', false);
+    }, 2000);
+    setTimeout(()=>{
+      this.controller.model.set('items', [
+        { img: 'http://placehold.it/100x100', txt: 'Lorem ipsum' },
+        { img: 'http://placehold.it/100x100', txt: 'Lorem ipsum' },
+        { img: 'http://placehold.it/100x100', txt: 'Lorem ipsum' },
+        { img: 'http://placehold.it/100x100', txt: 'Lorem ipsum' },
+        { img: 'http://placehold.it/100x100', txt: 'Lorem ipsum' },
+      ]);
+    }, 5000);
   }
 }

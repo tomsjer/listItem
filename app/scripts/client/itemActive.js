@@ -8,9 +8,11 @@ export default class ItemActive {
       model: this.model,
       container: '.item-active',
       events: {
-
+        'deleteItem:click': (e) => {
+          console.log(e);
+        },
       },
-      template: require('../../templates/ItemList.hbs'),
+      template: require('../../templates/ItemActive.hbs'),
     });
     this.controller = new Controller({
       model: this.model,
