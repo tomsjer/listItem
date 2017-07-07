@@ -145,7 +145,7 @@ gulp.task('js', ()=>{
   return bundler.bundle()
     .on('error', (err)=>{
       console.error(err);
-      this.emit('end');
+      server.kill();
     })
     .pipe(source('build.js'))
     .pipe(buffer())

@@ -1,0 +1,29 @@
+{{#if items}}
+  {{#if itemEdit}}
+    
+    <div class="item-active-img">
+      <img data-src="{{ img }}" alt="{{ txt }}">
+    </div>
+    <div class="item-active-txt">
+        <textarea data-bind="txt" name="txt" cols="30" rows="10" value="{{ txt }}"></textarea>
+    </div>
+  
+  {{ else }}
+  
+    <div class="item-active-img">
+      <img data-src="{{ img }}" alt="{{ txt }}">
+    </div>
+    <div class="item-active-txt">
+        <p>{{ txt }}</p>
+    </div>
+  
+  {{ /if }}
+  <a data-bind="deleteItem" href="#" class="btn btn-delete">X</a>
+  <a data-bind="finishEdit" href="#" class="btn btn-ok"></a>
+
+{{ else }}
+  <div class="no-items">
+    <h1>:(</h1>
+    <p>There are no items yet...</p>
+  </div>
+{{/if}}
