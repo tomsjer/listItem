@@ -7,7 +7,7 @@ export default class Controller extends EventEmitter {
     this.view = opts.view;
 
     this.view.setModel(this.model);
-    
+
     this.view.on('change', this.updateModel.bind(this));
     this.model.on('change', this.updateView.bind(this));
 
