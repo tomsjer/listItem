@@ -11,7 +11,9 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+// const upload = multer({ dest: 'uploads/' });
+const upload = multer();
+const sharp = require('sharp');
 
 /**
  *
@@ -51,16 +53,33 @@ app.get('/items', (req, res)=> {
 });
 
 app.post('/item', upload.single('img'), (req, res)=> {
-  req.session.items.push({
-    img: 'images/' + req.file.filename,
-    txt: req.body.txt,
-  });
-  res.json(req.session.items);
+  try {
+    sharp(req.file.buffer)
+    .resize(320, 320)
+    .toFile('uploads/' + req.file.originalname, function(err) {
+      if(err) throw err;
+    });
+
+    req.session.items.push({
+      img: 'images/' + req.file.originalname,
+    });
+    res.json(req.session.items);
+  }
+  catch(err) {
+    res.json({
+      code: 1,
+      error: err,
+    });
+  }
+
 });
 
 app.put('/item', (req, res)=>{
+  const origin = req.body.was;
+  const target = req.body.now;
   const items = req.session.items.slice(0);
-  // TODO: update item at index
+  const item = items[origin];
+  items.splice(origin, 1, target);
   // if oldImage != newImage delete oldImage
   req.session.items = items;
   res.json(req.session.items);

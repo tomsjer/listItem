@@ -36,6 +36,7 @@ export default class ItemActive {
           reader.onload = function readerOnload(evt) {
             items[i].img = evt.target.result;
             this.emit('change', 'items', items);
+            this.emit('fileRead', e);
           }.bind(this);
           reader.readAsDataURL(file);
         },
@@ -62,6 +63,23 @@ export default class ItemActive {
     this.controller = new Controller({
       model: this.model,
       view: this.view,
+    });
+    this.controller.view.on('fileRead', (e)=>{
+      const file = e.target.files[0];
+      const name = 'img';
+      const fd = new FormData();
+      fd.append(name, file);
+      fd.append('txt', 'txsdasdasd asdsa asd');
+
+      fetch('/item', {
+        method: 'post',
+        credentials: 'include',
+        body: fd,
+      })
+      .then(response => response.json())
+      .then((result)=>{
+        console.log(result);
+      });
     });
   }
 }
