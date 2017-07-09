@@ -6,14 +6,14 @@
   text-decoration: none !important;
   transition: background 0.25s ease, color 0.25s ease;
   font-size: 32px;
-  padding: 0 8px;
+  // padding: 0 8px;
   text-align: center;
   line-height: 48px;
   border-radius: 50%;
   width: 48px;
   height: 48px;
   display: block;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, .25);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, .2);
 
   &:hover {
     background: darken($btn-bg, 25%);
@@ -23,5 +23,10 @@
   &:active {
     background: invert($btn-bg);
     color:  invert($btn-color);
+  }
+
+  .material-icons {
+    color: $bg;
+    line-height: 48px !important;
   }
 }

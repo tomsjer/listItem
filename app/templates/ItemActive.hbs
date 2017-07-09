@@ -1,15 +1,15 @@
 {{#if items }}
   {{#if itemEdit}}
     {{#with (lookup items itemActive)}}
-      
-      
       <div class="item-active-img">
         <img src="{{ img }}" alt="{{ txt }}">
-        <a data-bind="deleteItem" href="#" class="btn btn-delete">X</a>
+        <input data-bind="file" type="file" class="hidden" >
+        <a data-bind="uploadImg" href="#" class="btn btn-upload"><i class="material-icons">file_upload</i></a>
+        <a data-bind="deleteItem" href="#" class="btn btn-delete"><i class="material-icons">clear</i></a>
       </div>
       <div class="item-active-txt">
-        <textarea data-bind="txt" name="txt" cols="30" rows="10" value="{{ txt }}"></textarea>
-        <a data-bind="finishEdit" href="#" class="btn btn-ok"></a>
+        <textarea data-bind="updateText" name="txt" cols="30" rows="10">{{ txt }}</textarea>
+        <a data-bind="finishEdit" href="#" class="btn btn-ok"><i class="material-icons">done</i></a>
       </div>
     {{/with}}
   {{ else }}
@@ -20,6 +20,7 @@
       <div class="item-active-txt">
           <p>{{txt}}</p>
       </div>
+      <a data-bind="startEdit" href="#" class="btn btn-edit"><i class="material-icons">create</i></a>
     {{/with}}
   
   {{/if }}

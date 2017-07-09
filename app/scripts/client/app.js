@@ -17,14 +17,18 @@ export default class App {
       model: this.model,
       container: document.querySelector('body'),
       events: {
-        'addItem:click': function(e){
+        'addItem:click': function addItem(e) {
           e.preventDefault();
           const items = this.model.get('items').slice(0);
           items.push({
-            img: 'http://placehold.it/100x100',
-            txt: 'Lorem ipsum',
+            img: '',
+            txt: '',
           });
-          this.emit('change', 'items', items);
+          this.model.setBulk({
+            'items': items,
+            'itemEdit': true,
+            'itemActive': items.length - 1
+          });
         },
       },
       template: require('../../templates/App.hbs'),

@@ -22,7 +22,11 @@ export default class ItemList {
       events: {
         'item:click': function onClick(e) {
           const index = e.currentTarget.dataset.index;
-          this.emit('change', 'itemActive', index);
+          // this.emit('change', 'itemActive', index);
+          this.model.setBulk({
+            'itemActive': index,
+            'itemEdit': false,
+          });
         },
       },
       template: require('../../templates/ItemList.hbs'),
@@ -35,14 +39,15 @@ export default class ItemList {
       });
       drake.on('drop', (el, target, source, sibling)=> {
         
-        const was = el.dataset.index | 0;
-        const now = sibling.dataset.index | 0;
-        
         const items = self.model.get('items').slice(0);
+        const was = el.dataset.index | 0;
+        const now = sibling.classList.contains('gu-mirror') ? items.length - 1 : sibling.dataset.index | 0;
+
+        // Move this to BE
         const item = items[was];
         items.splice(was, 1);
-        items.splice(now, 0, item);
-        self.emit('change','items',items);
+        items.splice(now, 0, item); // FIXME: when dropping below item substr 1?
+        self.emit('change', 'items', items);
       });
     });
     this.controller = new Controller({
