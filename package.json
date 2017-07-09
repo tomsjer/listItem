@@ -4,6 +4,7 @@
   "description": "FE test",
   "dependencies": {
     "body-parser": "^1.17.2",
+    "dragula": "^3.7.2",
     "express": "^4.15.2",
     "express-session": "^1.15.3",
     "multer": "^1.3.0"

@@ -53,6 +53,21 @@ aside.item-list {
       opacity: 1;
       background: #e6e6e6;
     }
+
+    &.gu-mirror {
+      background: white;
+      opacity: 1;
+      box-shadow: 8px 8px 0 rgba(100, 100, 100, 0.25);
+      border-bottom: 0;
+    }
+    &.gu-transit {
+      transition: background 0.5s ease;
+      background: #ccc;
+      & > div {
+        transition: opacity 0.5s ease;
+        opacity: 0;
+      }
+    }
   }
 
   .no-items {
