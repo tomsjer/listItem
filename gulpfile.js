@@ -10,7 +10,7 @@ const sourcemaps = require('gulp-sourcemaps');
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 const babel = require('babelify');
-const handlebars = require('handlebars');
+//const handlebars = require('handlebars');
 const hbsfy = require('hbsfy');
 const sass = require('gulp-sass');
 const concat = require('gulp-concat');
@@ -33,6 +33,14 @@ const tmpDir = `${__dirname}/.tmp`;
 const publicDir = config.publicDir;
 const serverDir = config.serverDir;
 
+/* FIXME: This is not working */
+const runtime = require('hbsfy/runtime');
+const helpers = require('./app/scripts/utils/hbs-helpers');
+
+Object.keys(helpers).forEach(function (key) {
+  runtime.registerHelper(key, helpers[key]);
+});
+
 /**
  *
  * Network settings
@@ -47,6 +55,7 @@ const SERVER_PORT = 8080;
 config.ip = IP_ADDRESS;
 config.port = SERVER_PORT;
 if(process.env.NODE_ENV === 'development') {
+  config.debug = true;
   config.livereload = true;
 }
 fs.writeFileSync(`${ __dirname }/config.json`, JSON.stringify(config));

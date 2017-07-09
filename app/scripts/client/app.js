@@ -17,9 +17,14 @@ export default class App {
       model: this.model,
       container: document.querySelector('body'),
       events: {
-        'addItem:click': (e) => {
+        'addItem:click': function(e){
           e.preventDefault();
-          console.log(e);
+          const items = this.model.get('items').slice(0);
+          items.push({
+            img: 'http://placehold.it/100x100',
+            txt: 'Lorem ipsum',
+          });
+          this.emit('change', 'items', items);
         },
       },
       template: require('../../templates/App.hbs'),
@@ -31,18 +36,12 @@ export default class App {
       view: this.view,
       children: children,
     });
-
-    setTimeout(()=>{
-      this.controller.model.set('loading', false);
-    }, 2000);
-    setTimeout(()=>{
-      this.controller.model.set('items', [
-        { img: 'http://placehold.it/100x100', txt: 'Lorem ipsum' },
-        { img: 'http://placehold.it/100x100', txt: 'Lorem ipsum' },
-        { img: 'http://placehold.it/100x100', txt: 'Lorem ipsum' },
-        { img: 'http://placehold.it/100x100', txt: 'Lorem ipsum' },
-        { img: 'http://placehold.it/100x100', txt: 'Lorem ipsum' },
-      ]);
-    }, 5000);
+  }
+  getModel() {
+    return this.controller.model.getJSON();
+  }
+  setModel(props) {
+    this.controller.model.setBulk(props);
+    return this.controller.model.getJSON();
   }
 }

@@ -1,6 +1,6 @@
 <p>
 {{#if items }}
-  Item {{ itemActive }} of {{ items.length }}
+  Item {{#addOne}}{{itemActive}}{{/addOne}} of {{ items.length }}
 {{ else }}
   0 Items
 {{/if}}

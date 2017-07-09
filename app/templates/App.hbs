@@ -1,11 +1,22 @@
-<div id="app">
-  <aside class="item-list">ItemList
-  </aside>
-  <main>
-    <div class="item-active">ItemActive</div>
-    <div class="counter">Counter</div>
-    <a data-bind="addItem" href="#" title="Clickme to add a new item!" class="btn btn-add">+</a>
-  </main>
-  <div class="notifications">
-  </div>
+<div id="app"
+  class=" {{#if loading}} loading {{/if}}
+          {{#if items}} has-items {{else}} no-items {{/if}}"
+  >
+  {{#if loading }}
+    <div class="preloader-container">
+      <div class="preloader"></div>
+      <br>
+      <p><small>loading</small></p>
+    </div>
+  {{ else }}
+    <aside class="item-list"></aside>
+    <main>
+      <div class="item-active"></div>
+      <div class="counter"></div>
+      <div class="tooltip"><p>Clickme to add a new item!</p></div>
+      <a data-bind="addItem" href="#" title="Clickme to add a new item!" class="btn btn-add">+</a>
+    </main>
+    <div class="notifications">
+    </div>
+  {{/if}}
 </div>

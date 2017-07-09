@@ -1,0 +1,26 @@
+.btn {
+  font-family: monospace;
+  font-weight: 700;
+  color: $btn-color;
+  background: $btn-bg;
+  text-decoration: none !important;
+  transition: background 0.25s ease, color 0.25s ease;
+  font-size: 32px;
+  padding: 0 8px;
+  text-align: center;
+  line-height: 48px;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: block;
+
+  &:hover {
+    background: darken($btn-bg, 25%);
+    color:  darken($btn-color, 25%);
+  }
+
+  &:active {
+    background: invert($btn-bg);
+    color:  invert($btn-color);
+  }
+}
