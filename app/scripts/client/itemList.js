@@ -17,10 +17,16 @@ export default class ItemList {
       model: model,
       container: '.item-list',
       events: {
-        'itemActive:click': function(e) {
+        'item:click': function(e) {
           const index = e.currentTarget.dataset.index;
           this.emit('change', 'itemActive', index);
         },
+        'item:dragstart': function(e) {
+          console.log('dragStart', e);
+        },
+        'item:dragend': function(e) {
+          
+        }
       },
       template: require('../../templates/ItemList.hbs'),
     });

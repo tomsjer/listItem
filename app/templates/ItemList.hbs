@@ -1,7 +1,7 @@
 <div class="wrapper dashed">
 {{#if items}}
   {{#each items}}
-    <div data-bind="itemActive" class="item {{#isActive index=@index itemActive=../itemActive}}active{{/isActive}}" data-index="{{@index}}">
+    <div data-bind="item" draggable="true" class="item {{#isActive index=@index itemActive=../itemActive}}active{{/isActive}}" data-index="{{@index}}">
       <div class="img-container">
         <img src="{{ img }}" alt="{{ txt }}">
       </div>
