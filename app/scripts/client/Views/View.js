@@ -48,12 +48,12 @@ export default class View extends EventEmitter {
       const arr = i.split(':');
       const selector = `[data-bind="${arr[0]}"]`;
       const event = arr[1];
-      const handler = typeof this.events[i] === 'function' ? this.events[i] : this[this.events[i]];
+      const handler = typeof this.events[i] === 'function' ? this.events[i].bind(this) : this[this.events[i]].bind(this);
       const container = typeof this.container === 'string' ?
                       document.querySelector(this.container) : this.container;
-      const el = container.querySelector(selector);
+      const el = container.querySelectorAll(selector);
       if(el) {
-        el.addEventListener(event, handler.bind(this));
+        el.forEach(e => e.addEventListener(event, handler.bind(this)));
       }
     }
   }
@@ -65,9 +65,9 @@ export default class View extends EventEmitter {
       const handler = typeof this.events[i] === 'function' ? this.events[i] : this[this.events[i]];
       const container = typeof this.container === 'string' ?
                       document.querySelector(this.container) : this.container;
-      const el = container.querySelector(selector);
+      const el = container.querySelectorAll(selector);
       if(el) {
-        el.removeEventListener(event, handler);
+        el.forEach(e => e.removeEventListener(event, handler));
       }
     }
   }

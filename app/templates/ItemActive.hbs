@@ -1,5 +1,4 @@
 {{#if items }}
-  Item Active:
   {{#if itemEdit}}
     <div class="item-active-img">
       <img data-src="{{ img }}" alt="{{ txt }}">
@@ -9,17 +8,18 @@
     </div>
   
   {{ else }}
-  
-    <div class="item-active-img">
-      <img data-src="{{ img }}" alt="{{ txt }}">
-    </div>
-    <div class="item-active-txt">
-        <p>{{ txt }}</p>
-    </div>
+     {{#with (lookup items itemActive)}}
+      <div class="item-active-img">
+        <img src="{{img}}" >
+      </div>
+      <div class="item-active-txt">
+          <p>{{txt}}</p>
+      </div>
+    {{/with}}
   
   {{/if }}
-  <a data-bind="deleteItem" href="#" class="btn btn-delete">X</a>
-  <a data-bind="finishEdit" href="#" class="btn btn-ok"></a>
+  {{!-- <a data-bind="deleteItem" href="#" class="btn btn-delete">X</a>
+  <a data-bind="finishEdit" href="#" class="btn btn-ok"></a> --}}
 
 {{ else }}
   <div class="no-items">

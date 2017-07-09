@@ -1,0 +1,63 @@
+aside.item-list {
+
+  width: 33.33%;
+  height: 100%;
+  position: relative;
+  float: left;
+  overflow-y: scroll;
+  padding: $padding;
+
+  .wrapper {
+    min-height: 100%;
+  }
+  
+  .item {
+    border-bottom: dashed 1px $border-color;
+    overflow: hidden;
+    opacity: 0.8;
+    cursor: pointer;
+    position: relative;
+
+    .img-container {
+      position: relative;
+      float: left;
+      width: 100px;
+      height: 100px;
+      img {
+        max-width: 100%;
+        min-width: 100px;
+        height: auto;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+
+    p {
+      width: calc(100% - 100px);
+      height: 100px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      position: relative;
+      float: left;
+      margin: 0;
+      padding: 8px;
+      font-weight: 100;
+      font-size: 14px;
+      color: $fg;
+    }
+
+    &.active, &:hover {
+      opacity: 1;
+      background: #e6e6e6;
+    }
+  }
+
+  .no-items {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+}

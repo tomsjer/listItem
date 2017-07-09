@@ -12,9 +12,9 @@ export default class Controller extends EventEmitter {
     this.model.on('change', this.updateView.bind(this));
 
     // Maybe leave concrete implementation to instance.
-    // if(!this.view.noUpdate) {
-      // this.view.render();
-    // }
+    if(!this.view.noUpdate) {
+      this.view.render();
+    }
   }
   render() {
     this.view.render();
@@ -23,6 +23,8 @@ export default class Controller extends EventEmitter {
     this.model.set(attribute, value);
   }
   updateView(prop) {
-    this.view.update(prop);
+    if(!this.view.noUpdate) {
+      this.view.update(prop);
+    }
   }
 }

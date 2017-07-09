@@ -1,10 +1,16 @@
-{{#each items }}
-<div class="item">
-  <div class="img-container">
-    <img data-src="{{ img }}" alt="{{ txt }}">
-  </div>
-  <div class="txt-container">
-    <p>{{ txt }}</p>
-  </div>
+<div class="wrapper dashed">
+{{#if items}}
+  {{#each items}}
+    <div data-bind="item" draggable="true" class="item {{#isActive index=@index itemActive=../itemActive}}active{{/isActive}}" data-index="{{@index}}">
+      <div class="img-container">
+        <img src="{{ img }}" alt="{{ txt }}">
+      </div>
+      <div class="txt-container">
+        <p>{{@index}}: {{ txt }}</p>
+      </div>
+    </div>
+  {{/each}}
+{{else}}
+  <div class="no-items"></div>
+{{/if}}
 </div>
-{{/each}}
