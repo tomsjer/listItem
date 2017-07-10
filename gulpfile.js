@@ -106,15 +106,18 @@ gulp.task('server', (done) => {
   // server.js will send message when ready
   server.on('message', (msg) => {
     if(msg.ready) {
-      const cmd = (os.platform() === 'win32') ? `start chrome ${config.protocol}://${config.ip}:${config.port}` :
-                                                `open http://${config.ip}:${config.port}`; //TODO: add browser bin to config
-      exec(cmd, (error, stdout, stderr) => {
-        if (error) {
-          console.error(`exec error: ${error}`);
-          return;
-        }
-        console.log(error, stdout, stderr);
-      });
+      setTimeout(()=>{
+        const cmd = (os.platform() === 'win32') ? `start chrome ${config.protocol}://${config.ip}:${config.port}` :
+                                                  `open http://${config.ip}:${config.port}`; //TODO: add browser bin to config
+        exec(cmd, (error, stdout, stderr) => {
+          if (error) {
+            console.error(`exec error: ${error}`);
+            return;
+          }
+          console.log(error, stdout, stderr);
+        });
+
+      }, 500);
 
       done();
     }
