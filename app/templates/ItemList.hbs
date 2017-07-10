@@ -8,6 +8,8 @@
       <div class="txt-container">
         <p>{{@index}}: {{ txt }}</p>
       </div>
+      <a data-bind="deleteItem" href="#" class="btn btn-delete"><i class="material-icons">clear</i></a>
+      <a data-bind="startEdit" href="#" class="btn btn-edit"><i class="material-icons">create</i></a>
     </div>
   {{/each}}
 {{else}}
