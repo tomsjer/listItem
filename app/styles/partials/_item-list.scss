@@ -49,6 +49,26 @@ aside.item-list {
       color: $fg;
     }
 
+    .btn {
+      position: absolute;
+      right: 8px;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+
+      &.btn-delete {
+        top: 8px;
+      }
+      &.btn-edit {
+        top: 48px;
+      }
+    }
+
+    &:hover {
+      .btn {
+        opacity: 1;
+      }
+    }
+
     &.active, &:hover {
       opacity: 1;
       background: #e6e6e6;
@@ -59,15 +79,23 @@ aside.item-list {
       opacity: 1;
       box-shadow: 8px 8px 0 rgba(100, 100, 100, 0.25);
       border-bottom: 0;
+      .btn {
+        display: none;
+      }
     }
     &.gu-transit {
       transition: background 0.5s ease;
       background: #ccc;
+
+      .btn {
+        display: none;
+      }
       & > div {
         transition: opacity 0.5s ease;
         opacity: 0;
       }
     }
+
   }
 
   .no-items {

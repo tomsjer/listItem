@@ -29,4 +29,17 @@
     color: $bg;
     line-height: 48px !important;
   }
+
+  &.btn-sm {
+    width: 32px;
+    height: 32px;
+    font-size: 24px;
+    line-height: 32px;
+    .material-icons {
+      font-size: 20px;
+      color: $bg;
+      line-height: 32px !important;
+    }
+  }
+
 }

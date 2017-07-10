@@ -4,10 +4,13 @@ import AppController from './Controllers/AppController.js';
 import ItemList from './itemList.js';
 import ItemActive from './itemActive.js';
 import Counter from './counter.js';
+
+import store from '../utils/store.js';
 import Notifications from './notifications.js';
 
 export default class App {
   constructor(opts) {
+
 
     this.model = new Model({
       attributes: opts.model.attributes,
@@ -35,14 +38,16 @@ export default class App {
       template: require('../../templates/App.hbs'),
     });
 
-    this.store = opts.store;
+    // Maintaining a consistent interface, store could be  localStorage/DB/...
+    this.store = store;
+    
     this.notifications = new Notifications({
       model: {
         attributes: {
           action: 'in',
           state: 'info',
           msg: 'Loading items...',
-          autohide: false,
+          autohide: true,
         },
       },
       view: {
@@ -50,7 +55,6 @@ export default class App {
         template: require('../../templates/Notifications.hbs'),
       },
     });
-    
     const self = this;
     const children = [
       new ItemList({
@@ -79,7 +83,7 @@ export default class App {
       new ItemActive({
         model: this.model,
         events: {
-          'addItem': this.addItem
+          'addItem': this.addItem.bind(this)
         },
       }),
       new Counter({
@@ -95,6 +99,9 @@ export default class App {
       view: this.view,
       children: children,
     });
+
+    this.preloaderWrapper = document.querySelector('.preloader-wrapper');
+    this.getItems();
   }
   getModel() {
     return this.controller.model.getJSON();
@@ -106,7 +113,19 @@ export default class App {
   getItems() {
     this.store.getItems()
     .then((result)=> {
-
+      this.setModel({
+        loading: false,
+        items: result.items,
+      });
+      this.notifications.model.setBulk({
+        action: 'out',
+        msg: 'Done!',
+        state: 'success',
+      });
+      this.preloaderWrapper.style.opacity = 0;
+      setTimeout(()=>{
+        this.preloaderWrapper.remove();
+      }, 1000);
     });
   }
   addItem(e) {
@@ -118,15 +137,29 @@ export default class App {
 
     fd.append(name, file);
     fd.append('txt', txt);
-
-    fetch('/item', {
-      method: 'post',
-      credentials: 'include',
-      body: fd,
-    })
-    .then(response => response.json())
-    .then((result)=>{
-      console.log(result);
+    this.notifications.model.setBulk({
+      action: 'in',
+      state: 'info',
+      msg: 'Saving item...',
+    });
+    this.store.saveItem(fd)
+    .then((response)=>{
+      if(!response.code) {
+        this.setModel({ items: response.items, itemEdit: false });
+        this.notifications.model.setBulk({
+          action: 'out',
+          state: 'success',
+          msg: 'Saved! :)',
+        });
+      }
+      else {
+        this.notifications.model.setBulk({
+          autohide: false,
+          action: 'out',
+          state: 'error',
+          msg: 'Something went wrong... :(',
+        });
+      }
     });
   }
   reorderItem(prevIndex, currIndex) {

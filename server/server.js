@@ -57,7 +57,10 @@ app.get('/', (req, res)=>{
 // List items
 app.get('/items', (req, res)=> {
   try {
-    res.json(req.session.items);
+    res.json({
+      code: 0,
+      items: req.session.items,
+    });
   }
   catch(e) {
     res.json({
@@ -80,7 +83,10 @@ app.post('/item', upload.single('img'), (req, res)=> {
       img: 'images/' + req.file.originalname,
       txt: req.body.txt,
     });
-    res.json(req.session.items);
+    res.json({
+      code: 0,
+      items: req.session.items,
+    });
   }
   catch(err) {
     res.json({
@@ -104,7 +110,10 @@ app.put('/item', (req, res)=>{
     items.splice(i, 1, item);
 
     req.session.items = items;
-    res.json(req.session.items);
+    res.json({
+      code: 0,
+      items: req.session.items,
+    });
   }
   catch(e) {
     res.json({
@@ -125,7 +134,10 @@ app.put('/items', (req, res)=>{
     // if oldImage != newImage delete oldImage
 
     req.session.items = items;
-    res.json(req.session.items);
+    res.json({
+      code: 0,
+      items: req.session.items,
+    });
   }
   catch(e) {
     res.json({
@@ -146,7 +158,10 @@ app.delete('/item', (req, res)=> {
     items.splice(i, 1);
 
     req.session.items = items;
-    res.json(req.session.items);
+    res.json({
+      code: 0,
+      items: req.session.items,
+    });
   }
   catch(e) {
     res.json({
