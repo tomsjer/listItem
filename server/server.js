@@ -105,7 +105,17 @@ app.put('/item', upload.single('img'), (req, res)=>{
     const item = items[i];
 
     // if oldImage != newImage delete oldImage
-    // item.img = multer(), shark(), req.file.originalfilename?;
+    if(req.file && item.img !== 'images/' + req.file.originalname) {
+      
+      // TODO: DELETE OLD IMG
+      sharp(req.file.buffer)
+      .resize(320, 320)
+      .toFile('uploads/' + req.file.originalname, function(err) {
+        if(err) throw err;
+      });
+
+      item.img = 'images/' + req.file.originalname;
+    }
     item.txt = req.body.txt;
     items.splice(i, 1, item);
 
