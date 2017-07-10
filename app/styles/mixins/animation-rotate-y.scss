@@ -1,0 +1,25 @@
+@mixin animation-rotate-y() {
+  @keyframes rotate-y {
+    0% {
+      background: rgba(100, 100, 100, 0.1);
+      transform: translate3d(0, 0, 0) rotateY(360deg);
+      
+    }
+    27% {
+      background: rgba(100, 100, 100, 0.3);
+      transform: translate3d(0, 100, 0) rotateY(180deg);
+    }
+    37% {
+      transform: translate3d(0, 0, 0) rotateY(0deg);
+      background: rgba(100, 100, 100, 0.15);
+    }
+    66% {
+      
+      background: rgba(100, 100, 100, 0.12);
+    }
+    100% {
+      transform: translate3d(0, 0, 0) rotateY(0deg);
+      background: rgba(100, 100, 100, 0.1);
+    }
+  }
+}

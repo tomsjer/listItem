@@ -1,0 +1,26 @@
+<div class="wrapper dashed">
+{{#if items}}
+  {{#each items}}
+    <div data-bind="item" draggable="true" class="item {{#isActive index=@index itemActive=../itemActive}}active{{/isActive}}" data-index="{{@index}}">
+      <div class="img-container">
+        {{#if img}}
+          <img data-src="{{ img }}" class="loading" alt="{{ txt }}">
+        {{else}}
+          <i class="material-icons placeholder">photo</i>
+        {{/if}}
+      </div>
+      <div class="txt-container">
+        {{#if txt }}
+          <p>{{ txt }}</p>
+        {{else}}
+          {{!-- <p class="placeholder">[ your text will popup here ]</p> --}}
+        {{/if}}
+      </div>
+      <a data-bind="deleteItem" href="#" class="btn btn-sm btn-delete"><i class="material-icons">clear</i></a>
+      <a data-bind="startEdit" href="#" class="btn btn-sm btn-edit"><i class="material-icons">create</i></a>
+    </div>
+  {{/each}}
+{{else}}
+  <div class="no-items"></div>
+{{/if}}
+</div>

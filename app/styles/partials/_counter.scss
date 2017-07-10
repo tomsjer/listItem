@@ -1,0 +1,5 @@
+.counter {
+  
+  @include material;
+  padding: 0 #{$padding / 2};
+}

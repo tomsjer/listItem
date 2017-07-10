@@ -1,0 +1,50 @@
+@include animation-rotate-y;
+
+#app {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  &.loading {
+    
+  }
+
+  .tooltip {
+    opacity: 0;
+    bottom: 24px;
+    right: 100px;
+
+  }
+  
+  aside {
+
+  }
+  
+  main {
+    width: 66.66%;
+    position: relative;
+    float: right;
+    height: 100%;
+    overflow: hidden;
+    
+    .item-active {
+      @include center-absolute;
+    }
+    .counter {
+      position: absolute;
+      bottom: $padding * 2;
+      left: $padding * 2;
+    }
+    .btn-add {
+      position: absolute;
+      bottom: $padding * 2;
+      right: $padding * 2;
+    }
+  }
+
+  &.no-items {
+    .tooltip {
+      opacity: 1;
+    }
+  }
+}

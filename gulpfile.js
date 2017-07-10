@@ -10,7 +10,7 @@ const sourcemaps = require('gulp-sourcemaps');
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 const babel = require('babelify');
-const handlebars = require('handlebars');
+//const handlebars = require('handlebars');
 const hbsfy = require('hbsfy');
 const sass = require('gulp-sass');
 const concat = require('gulp-concat');
@@ -28,9 +28,18 @@ const config = require('./config.json');
 const srcDir = config.srcDir;
 const scriptsDir = `${srcDir}/scripts`;
 const stylesDir = `${srcDir}/styles`;
+const templatesDir = `${srcDir}/templates`;
 const tmpDir = `${__dirname}/.tmp`;
 const publicDir = config.publicDir;
 const serverDir = config.serverDir;
+
+/* FIXME: This is not working */
+const runtime = require('hbsfy/runtime');
+const helpers = require('./app/scripts/utils/hbs-helpers');
+
+Object.keys(helpers).forEach(function (key) {
+  runtime.registerHelper(key, helpers[key]);
+});
 
 /**
  *
@@ -46,7 +55,12 @@ const SERVER_PORT = 8080;
 config.ip = IP_ADDRESS;
 config.port = SERVER_PORT;
 if(process.env.NODE_ENV === 'development') {
+  config.debug = true;
   config.livereload = true;
+}
+else {
+  config.debug = false;
+  config.livereload = false;
 }
 fs.writeFileSync(`${ __dirname }/config.json`, JSON.stringify(config));
 
@@ -75,6 +89,7 @@ gulp.task('serve', ['js', 'concat-styles', 'server'], ()=>{
   gulp.watch(`${serverDir}/*.js`, ['kill-server', 'server']);
   gulp.watch(`${configFile}`, ['kill-server', 'server', 'js-watch']);
   gulp.watch(`${scriptsDir}/**/**/*.js`, ['js-watch']);
+  gulp.watch(`${templatesDir}/**/**/*.hbs`, ['js-watch']);
   gulp.watch(`${stylesDir}/**/*.scss`, ['sass-watch']);
   gulp.watch(`${publicDir}/*.html`, ()=>{ reload(); });
 });
@@ -143,7 +158,7 @@ gulp.task('js', ()=>{
   return bundler.bundle()
     .on('error', (err)=>{
       console.error(err);
-      this.emit('end');
+      server.kill();
     })
     .pipe(source('build.js'))
     .pipe(buffer())

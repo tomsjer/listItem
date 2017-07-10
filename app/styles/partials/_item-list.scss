@@ -1,0 +1,129 @@
+aside.item-list {
+
+  width: 33.33%;
+  height: 100%;
+  position: relative;
+  float: left;
+  overflow-y: scroll;
+  padding: $padding;
+
+  .wrapper {
+    min-height: 100%;
+  }
+  
+  .item {
+    border-bottom: dashed 1px $border-color;
+    overflow: hidden;
+    opacity: 0.8;
+    position: relative;
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+
+    .img-container {
+      position: relative;
+      float: left;
+      width: 100px;
+      height: 100px;
+      background: #555;
+
+      img {
+        max-width: 100%;
+        min-width: 100px;
+        height: auto;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 1;
+        transition: opacity 0.25s ease;
+      }
+
+      &.loading {
+        animation: rotate-y 1.25s ease infinite;
+        img {
+          opacity: 0;
+        }
+      }
+      .material-icons.placeholder {
+        @include center-absolute;
+        color: #ccc;
+        font-size: 32px;
+      }
+    }
+
+
+    p {
+      width: calc(100% - 100px);
+      height: 100px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      position: relative;
+      float: left;
+      margin: 0;
+      padding: 8px;
+      font-weight: 100;
+      font-size: 14px;
+      color: $fg;
+
+    }
+
+    .btn {
+      position: absolute;
+      right: 8px;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+
+      &.btn-delete {
+        top: 8px;
+      }
+      &.btn-edit {
+        top: 48px;
+      }
+    }
+
+    &:hover {
+      .btn {
+        opacity: 1;
+      }
+    }
+
+    &.active, &:hover {
+      opacity: 1;
+      background: lighten($bg, 7.5%);
+    }
+
+    &.gu-mirror {
+      background: white;
+      opacity: 1;
+      box-shadow: 8px 8px 0 rgba(100, 100, 100, 0.25);
+      border-bottom: 0;
+      cursor: grabbing;
+      cursor: -moz-grabbing;
+      cursor: -webkit-grabbing;
+      .btn {
+        display: none;
+      }
+    }
+    &.gu-transit {
+      transition: background 0.5s ease;
+      background: #ccc;
+
+      .btn {
+        display: none;
+      }
+      & > div {
+        transition: opacity 0.5s ease;
+        opacity: 0;
+      }
+    }
+
+  }
+
+  .no-items {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+}

@@ -1,0 +1,76 @@
+@keyframes slidein {
+  0% {
+    transform: translate3d(-50%, -100%, 0);
+    box-shadow: 0 0px 4px rgba(0, 0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+    box-shadow: 0 4px 4px rgba(0, 0, 0, .2);
+  }
+}
+
+@keyframes slideout {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+    box-shadow: 0 4px 4px rgba(0, 0, 0, .2);
+  }
+  100% {
+    transform: translate3d(-50%, -100%, 0);
+    box-shadow: 0 0px 4px rgba(0, 0, 0, 0);
+  }
+}
+
+@keyframes slidebg {
+  0% {
+
+    background-position: 0px;
+  }
+  100% {
+    background-position: 32px;
+  }
+}
+.notifications {
+  position: fixed;
+  z-index: 2000;
+  padding: 8px 16px;
+  top: 0;
+  left: 50%;
+  transform: translate3d(-50%, 0, 0);
+  background: $fg;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, .2);
+
+  p {
+    font-size: 14px;
+    text-align: center;
+    margin: 0;
+    color: $bg;
+  }
+
+  &.error {
+    background: $error-bg;
+  }
+
+  &.success {
+    background: $success-bg;
+  }
+
+  &.in {
+    animation: slidein 0.5s forwards;
+  }
+  &.autohide.out {
+    animation: slideout 0.5s forwards;
+    animation-delay: 1s;
+  }
+
+  .progress-bar {
+    width: 112px;
+    height: $padding / 2;
+    display: block;
+    position: relative;
+    background-repeat: repeat-x;
+    background-size: 11px 12px;
+    background-image: repeating-linear-gradient(-45deg, transparent, transparent 4px, white 4px, white 8px);
+    animation: slidebg 1s linear infinite;
+    margin: #{ $padding / 2 } 0;
+  }
+}

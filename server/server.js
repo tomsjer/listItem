@@ -11,7 +11,9 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
+// const upload = multer({ dest: 'uploads/' });
+const upload = multer();
+const sharp = require('sharp');
 
 /**
  *
@@ -46,32 +48,148 @@ app.get('/', (req, res)=>{
 //   });
 // });
 
+/**
+ *
+ * ListItems API
+ *
+ */
+
+// List items
 app.get('/items', (req, res)=> {
-  res.json(req.session.items);
+  try {
+    res.json({
+      code: 0,
+      items: req.session.items,
+    });
+  }
+  catch(e) {
+    res.json({
+      code: 1,
+      msg: e,
+    });
+  }
 });
 
+// Add item
 app.post('/item', upload.single('img'), (req, res)=> {
-  req.session.items.push({
-    img: 'images/' + req.file.filename,
-    txt: req.body.txt,
-  });
-  res.json(req.session.items);
+  try {
+    sharp(req.file.buffer)
+    .resize(320, 320)
+    .toFile('uploads/' + req.file.originalname, function(err) {
+      if(err) throw err;
+
+      req.session.items.push({
+        img: 'images/' + req.file.originalname,
+        txt: req.body.txt,
+      });
+      res.json({
+        code: 0,
+        items: req.session.items,
+      });
+    });
+  }
+  catch(err) {
+    res.json({
+      code: 1,
+      error: err,
+    });
+  }
+
 });
 
-app.put('/item', (req, res)=>{
-  const items = req.session.items.slice(0);
-  // TODO: update item at index
-  // if oldImage != newImage delete oldImage
-  req.session.items = items;
-  res.json(req.session.items);
+// EditItem
+app.put('/item', upload.single('img'), (req, res)=>{
+  try {
+    const i = req.body.index;
+    const items = req.session.items.slice(0);
+    const item = items[i];
+
+    // if oldImage != newImage delete oldImage
+    if(req.file && item.img !== 'images/' + req.file.originalname) {
+
+      // TODO: DELETE OLD IMG
+      sharp(req.file.buffer)
+      .resize(320, 320)
+      .toFile('uploads/' + req.file.originalname, function(err) {
+        if(err) throw err;
+
+        item.img = 'images/' + req.file.originalname;
+        item.txt = req.body.txt;
+        items.splice(i, 1, item);
+
+        req.session.items = items;
+        res.json({
+          code: 0,
+          items: req.session.items,
+        });
+      });
+
+    }
+    else {
+      item.txt = req.body.txt;
+      items.splice(i, 1, item);
+
+      req.session.items = items;
+      res.json({
+        code: 0,
+        items: req.session.items,
+      });
+    }
+    
+  }
+  catch(e) {
+    res.json({
+      code: 1,
+      msg: e,
+    });
+  }
 });
 
-// TODO: delete image
+// Reorder
+app.put('/items', (req, res)=>{
+  try {
+    const items = req.session.items.slice(0);
+    const item = items[req.body.prevIndex];
+    req.body.currIndex = req.body.currIndex === -1 ? items.length - 1 : req.body.currIndex;
+    items.splice(req.body.prevIndex, 1);
+    items.splice(req.body.currIndex, 0, item);
+
+    req.session.items = items;
+    res.json({
+      code: 0,
+      items: req.session.items,
+    });
+  }
+  catch(e) {
+    res.json({
+      code: 1,
+      msg: e,
+    });
+  }
+});
+
+// DeleteItem
 app.delete('/item', (req, res)=> {
-  const items = req.session.items.slice(0);
-  items.splice(req.body.index, 1);
-  req.session.items = items;
-  res.json(req.session.items);
+  try {
+    const i = req.body.index;
+    const items = req.session.items.slice(0);
+    const item = items[i];
+
+    // Delete item[i].img from disk
+    items.splice(i, 1);
+
+    req.session.items = items;
+    res.json({
+      code: 0,
+      items: req.session.items,
+    });
+  }
+  catch(e) {
+    res.json({
+      code: 1,
+      msg: e,
+    });
+  }
 });
 
 const server = httpMod.createServer(app);
