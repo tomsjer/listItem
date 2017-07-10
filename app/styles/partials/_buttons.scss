@@ -6,14 +6,15 @@
   text-decoration: none !important;
   transition: background 0.25s ease, color 0.25s ease;
   font-size: 32px;
-  // padding: 0 8px;
+  border: none;
   text-align: center;
   line-height: 48px;
   border-radius: 50%;
   width: 48px;
   height: 48px;
-  display: block;
+  display: inline-block;
   box-shadow: 0 4px 4px rgba(0, 0, 0, .2);
+  cursor: pointer;
 
   &:hover {
     background: darken($btn-bg, 25%);
@@ -29,4 +30,17 @@
     color: $bg;
     line-height: 48px !important;
   }
+
+  &.btn-sm {
+    width: 32px;
+    height: 32px;
+    font-size: 24px;
+    line-height: 32px;
+    .material-icons {
+      font-size: 20px;
+      color: $bg;
+      line-height: 32px !important;
+    }
+  }
+
 }

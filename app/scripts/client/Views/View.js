@@ -13,6 +13,8 @@ export default class View extends EventEmitter {
     this.on('upate', this.update);
     this.on('afterRender', this.bindEvents);
     this.on('beforeDestroy', this.unbindEvents);
+
+    this.render();
   }
   update(prop) {
     if (this.noUpdate) { return; }
@@ -28,7 +30,7 @@ export default class View extends EventEmitter {
       this.emit('afterRender');
     }
     else {
-      console.log(this, 'container is null');
+       console.log(`[view #render] this.container [${this.container}] is null`);
     }
   }
   destroy() {
@@ -40,7 +42,7 @@ export default class View extends EventEmitter {
       this.emit('afterDestroy');
     }
     else {
-      console.log(this, 'container is null');
+      console.log(`[view #destroy] this.container [${this.container}] is null`);
     }
   }
   bindEvents() {

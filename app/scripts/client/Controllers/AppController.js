@@ -7,12 +7,12 @@ export default class AppController extends Controller {
     this.children = opts.children;
     this.views = this.children.map(children => children.view);
 
-    this.view.on('beforeRender', this.destroySubViews.bind(this));
+    this.view.on('beforeDestroy', this.destroySubViews.bind(this));
     this.view.on('afterRender', this.appendSubViews.bind(this));
 
-    this.render();
   }
   destroySubViews() {
+
     this.views.forEach(view => view.destroy());
   }
   appendSubViews() {

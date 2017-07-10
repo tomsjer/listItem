@@ -1,5 +1,6 @@
 import View from './Views/View.js';
 import Controller from './Controllers/Controller.js';
+import imagesLoaded from '../utils/imagesLoaded.js';
 import Handlebars from 'hbsfy/runtime';
 import dragula from 'dragula';
 
@@ -15,9 +16,9 @@ Handlebars.registerHelper('isActive', function isActive(options) {
 });
 
 export default class ItemList {
-  constructor(model) {
+  constructor(opts) {
     this.view = new View({
-      model: model,
+      model: opts.model,
       container: '.item-list',
       events: {
         'item:click': function onClick(e) {
@@ -28,31 +29,45 @@ export default class ItemList {
             'itemEdit': false,
           });
         },
+        'deleteItem:click': function onClick(e) {
+          this.emit('deleteItem', e);
+        },
+        'startEdit:click': function startEdit(e) {
+          this.emit('startEdit', e);
+          e.cancelBubble = true;
+        },
       },
       template: require('../../templates/ItemList.hbs'),
     });
+
+    this.view.on('afterRender', function loadImages() {
+      const container = document.querySelector(this.container);
+      container.querySelectorAll('img[data-src]').forEach(el => imagesLoaded(el) );
+    });
+    // Sortable
     this.view.on('afterRender', function setDragula() {
+
       const self = this;
       const container = document.querySelector('.item-list .wrapper');
       const drake = dragula([container], {
         mirrorContainer: container,
       });
       drake.on('drop', (el, target, source, sibling)=> {
-        
-        const items = self.model.get('items').slice(0);
-        const was = el.dataset.index | 0;
-        const now = sibling.classList.contains('gu-mirror') ? items.length - 1 : sibling.dataset.index | 0;
 
-        // Move this to BE
-        const item = items[was];
-        items.splice(was, 1);
-        items.splice(now, 0, item); // FIXME: when dropping below item substr 1?
-        self.emit('change', 'items', items);
+        const prevIndex = el.dataset.index | 0;
+        let currIndex = prevIndex;
+        if(sibling) {
+          currIndex = sibling.classList.contains('gu-mirror') ? -1 : sibling.dataset.index > prevIndex ? (sibling.dataset.index | 0) - 1 : sibling.dataset.index | 0;
+        }
+
+        self.emit('reorderItem', prevIndex, currIndex);
       });
     });
+
     this.controller = new Controller({
-      model: model,
+      model: opts.model,
       view: this.view,
+      events: opts.events
     });
   }
 }

@@ -58,6 +58,10 @@ if(process.env.NODE_ENV === 'development') {
   config.debug = true;
   config.livereload = true;
 }
+else {
+  config.debug = false;
+  config.livereload = false;
+}
 fs.writeFileSync(`${ __dirname }/config.json`, JSON.stringify(config));
 
 /**

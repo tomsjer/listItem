@@ -1,17 +1,21 @@
 @import 'node_modules/dragula/dist/dragula';
 @import 'partials/variables';
+
+@import 'mixins/center-absolute';
+@import 'mixins/animation-rotate-y';
+@import 'mixins/material';
+
 @import 'partials/typography';
 @import 'partials/buttons';
 @import 'partials/tooltip';
 
-@import 'mixins/center-absolute';
-@import 'mixins/animation-rotate-y';
 
+@import 'partials/preloader';
 @import 'partials/app';
 @import 'partials/item-list';
 @import 'partials/item-active';
 @import 'partials/counter';
-// @import 'notifications';
+@import 'partials/notifications';
 // 
 * {
   box-sizing: border-box;
@@ -52,4 +56,9 @@ body {
   display: none;
   visibility: hidden;
   opacity: 0;
+}
+
+.app.wrapper {
+  width: 100%;
+  height: 100%;
 }
