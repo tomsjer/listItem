@@ -1,13 +1,16 @@
 main {
   .item-active {
+    
+    @include material;
+
     .item-active-img, .no-items {
       position: relative;
       margin: auto;
       display: block;
-      margin-bottom: 32px;
+      margin-bottom: $padding;
       width: 320px;
       height: 320px;
-      border: solid 1px #ccc;
+      background: #dedede;
 
       img {
         width: 100%;
@@ -33,7 +36,7 @@ main {
 
     &:hover {
       .btn-edit {
-        opacity: 1;
+        opacity: 1 !important;
       }
     }
 
@@ -42,6 +45,25 @@ main {
         background-repeat: no-repeat;
         background-size: cover;
         background-position: center;
+
+        &:hover {
+          .btn-upload {
+            opacity: 1 !important;
+          }
+        }
+        span.error {
+          @include center-absolute;
+          top: 70%;
+          color: lighten($error-bg, 25%);
+          font-size: 14px;
+          display: none;
+        }
+        &.error {
+          border: solid 1px lighten($error-bg, 25%);
+          span.error {
+            display: block;
+          }
+        }
       }
       .btn-delete {
         position: absolute;
@@ -55,9 +77,6 @@ main {
         transform: translate(-50%, -50%);
         opacity: 0.5;
         transition: opacity 0.25s ease;
-        &:hover {
-          opacity: 1;
-        }
       }
       .btn-ok {
         position: absolute;
@@ -84,11 +103,13 @@ main {
     }
     
     .no-items {
+      margin-bottom: 0;
       h1 {
         text-align: center;
         font-weight: 700;
         font-size: 36px;
-        margin-top: calc(40% - 24px);
+        padding-top: calc(40% - 24px);
+        margin: 0;
       }
       p {
         text-align: center;

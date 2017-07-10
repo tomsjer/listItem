@@ -77,15 +77,15 @@ app.post('/item', upload.single('img'), (req, res)=> {
     .resize(320, 320)
     .toFile('uploads/' + req.file.originalname, function(err) {
       if(err) throw err;
-    });
 
-    req.session.items.push({
-      img: 'images/' + req.file.originalname,
-      txt: req.body.txt,
-    });
-    res.json({
-      code: 0,
-      items: req.session.items,
+      req.session.items.push({
+        img: 'images/' + req.file.originalname,
+        txt: req.body.txt,
+      });
+      res.json({
+        code: 0,
+        items: req.session.items,
+      });
     });
   }
   catch(err) {
@@ -106,24 +106,36 @@ app.put('/item', upload.single('img'), (req, res)=>{
 
     // if oldImage != newImage delete oldImage
     if(req.file && item.img !== 'images/' + req.file.originalname) {
-      
+
       // TODO: DELETE OLD IMG
       sharp(req.file.buffer)
       .resize(320, 320)
       .toFile('uploads/' + req.file.originalname, function(err) {
         if(err) throw err;
+
+        item.img = 'images/' + req.file.originalname;
+        item.txt = req.body.txt;
+        items.splice(i, 1, item);
+
+        req.session.items = items;
+        res.json({
+          code: 0,
+          items: req.session.items,
+        });
       });
 
-      item.img = 'images/' + req.file.originalname;
     }
-    item.txt = req.body.txt;
-    items.splice(i, 1, item);
+    else {
+      item.txt = req.body.txt;
+      items.splice(i, 1, item);
 
-    req.session.items = items;
-    res.json({
-      code: 0,
-      items: req.session.items,
-    });
+      req.session.items = items;
+      res.json({
+        code: 0,
+        items: req.session.items,
+      });
+    }
+    
   }
   catch(e) {
     res.json({

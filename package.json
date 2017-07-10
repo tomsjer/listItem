@@ -34,8 +34,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "gulp serve",
-    "start:dev": "NODE_ENV=development gulp serve",
+    "start": "NODE_ENV=development gulp serve",
+    "serve": "gulp serve",
     "build": "gulp"
   },
   "author": "tomsjer",

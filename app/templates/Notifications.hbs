@@ -1,3 +1,6 @@
 <div class="notifications {{ state }} {{ action }} {{#if autohide}} autohide {{/if}}">
   <p>{{ msg }}</p>
+  {{#if showProgress }}
+    <div class="progress-bar"></div>
+  {{/if}}
 </div>

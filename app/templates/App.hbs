@@ -9,8 +9,8 @@
     <main>
       <div class="item-active {{#if itemEdit}} item-edit {{/if}}"></div>
       <div class="counter"></div>
-      <div class="tooltip"><p>Clickme to add a new item!</p></div>
-      <a data-bind="addItem" href="#" title="Clickme to add a new item!" class="btn btn-add {{#if itemEdit}} hidden {{/if }}"><i class="material-icons">add</i></a>
+      <div class="tooltip {{#if itemEdit}} hidden {{/if }}"><p>Clickme to add a new item!</p></div>
+      <a data-bind="addItem" href="#" title="Clickme to add a new item!" class="btn btn-add  {{#if itemEdit}}hidden {{/if }}"><i class="material-icons">add</i></a>
     </main>
     <div class="notifications-container">
     </div>

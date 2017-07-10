@@ -55,6 +55,22 @@ const store = {
         resolve(result);
       });
     });
+  },
+  deleteItem:function(json) {
+    return new Promise((resolve, reject)=>{
+      fetch('/item', {
+        method: 'delete',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(json),
+      })
+      .then(response => response.json())
+      .then((result)=>{
+        resolve(result);
+      });
+    });
   }
 };
 

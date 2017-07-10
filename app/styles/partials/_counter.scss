@@ -1,4 +1,5 @@
 .counter {
-  border: solid 1px $fg;
+  
+  @include material;
   padding: 0 #{$padding / 2};
 }

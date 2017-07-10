@@ -14,6 +14,7 @@
   height: 48px;
   display: inline-block;
   box-shadow: 0 4px 4px rgba(0, 0, 0, .2);
+  cursor: pointer;
 
   &:hover {
     background: darken($btn-bg, 25%);

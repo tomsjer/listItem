@@ -15,8 +15,11 @@ aside.item-list {
     border-bottom: dashed 1px $border-color;
     overflow: hidden;
     opacity: 0.8;
-    cursor: pointer;
     position: relative;
+    cursor: move; /* fallback if grab cursor is unsupported */
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
 
     .img-container {
       position: relative;
@@ -43,6 +46,11 @@ aside.item-list {
           opacity: 0;
         }
       }
+      .material-icons.placeholder {
+        @include center-absolute;
+        color: #ccc;
+        font-size: 32px;
+      }
     }
 
 
@@ -58,6 +66,7 @@ aside.item-list {
       font-weight: 100;
       font-size: 14px;
       color: $fg;
+
     }
 
     .btn {
@@ -82,7 +91,7 @@ aside.item-list {
 
     &.active, &:hover {
       opacity: 1;
-      background: #e6e6e6;
+      background: lighten($bg, 7.5%);
     }
 
     &.gu-mirror {
@@ -90,6 +99,9 @@ aside.item-list {
       opacity: 1;
       box-shadow: 8px 8px 0 rgba(100, 100, 100, 0.25);
       border-bottom: 0;
+      cursor: grabbing;
+      cursor: -moz-grabbing;
+      cursor: -webkit-grabbing;
       .btn {
         display: none;
       }

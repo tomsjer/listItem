@@ -32,8 +32,9 @@ export default class ItemList {
         'deleteItem:click': function onClick(e) {
           this.emit('deleteItem', e);
         },
-        'startEdit:click': function startEdit() {
-          this.emit('startEdit');
+        'startEdit:click': function startEdit(e) {
+          this.emit('startEdit', e);
+          e.cancelBubble = true;
         },
       },
       template: require('../../templates/ItemList.hbs'),
@@ -54,7 +55,10 @@ export default class ItemList {
       drake.on('drop', (el, target, source, sibling)=> {
 
         const prevIndex = el.dataset.index | 0;
-        const currIndex = sibling.classList.contains('gu-mirror') ? -1 : sibling.dataset.index > prevIndex ? (sibling.dataset.index | 0) - 1 : sibling.dataset.index | 0;
+        let currIndex = prevIndex;
+        if(sibling) {
+          currIndex = sibling.classList.contains('gu-mirror') ? -1 : sibling.dataset.index > prevIndex ? (sibling.dataset.index | 0) - 1 : sibling.dataset.index | 0;
+        }
 
         self.emit('reorderItem', prevIndex, currIndex);
       });

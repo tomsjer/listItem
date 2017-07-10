@@ -32,7 +32,7 @@ export default class App {
             'items': items,
             'itemEdit': true,
             'itemActive': items.length - 1,
-            'itemNew': true
+            'itemNew': true,
           });
         },
       },
@@ -49,6 +49,7 @@ export default class App {
           state: 'info',
           msg: 'Loading items...',
           autohide: true,
+          showProgress: false
         },
       },
       view: {
@@ -56,6 +57,10 @@ export default class App {
         template: require('../../templates/Notifications.hbs'),
       },
     });
+    this.view.once('afterRender', ()=>{
+      this.notifications.view.render()
+    })
+
     const self = this;
     const children = [
       new ItemList({
@@ -63,23 +68,15 @@ export default class App {
         events: {
           'deleteItem': function deleteItem(e) {
 
-            // Move this logic to BE
-            // This should just call: store.deleteItem()
-            const i = this.model.get('itemActive') | 0;
-            const items = this.model.get('items').slice(0);
-            items.splice(i, 1);
-            this.model.setBulk({
-              'items': items,
-              'itemActive': items.length ? items.length - 1 : 0,
-              'itemEdit': items.length ? true : false 
-            });
+            self.deleteItem.call(self, e);
             e.cancelBubble = true;
           },
           'reorderItem': this.reorderItem.bind(this),
-          'startEdit': function startEdit() {
+          'startEdit': function startEdit(e) {
             this.model.setBulk({
               'itemEdit': true,
-              'itemNew': false
+              'itemNew': false,
+              'itemActive': e.currentTarget.parentNode.dataset.index,
             });
           }.bind(this),
         },
@@ -89,7 +86,10 @@ export default class App {
         events: {
           'addItem': this.addItem.bind(this),
           'startEdit': function startEdit() {
-            this.model.set('itemEdit', true);
+            this.model.setBulk({
+              'itemEdit': true,
+              'itemNew': false
+            });
           }.bind(this),
           'updateItem': this.updateItem.bind(this),
         },
@@ -99,7 +99,7 @@ export default class App {
         events: {
 
         },
-      }),
+      })
     ];
 
     this.controller = new AppController({
@@ -125,15 +125,17 @@ export default class App {
         loading: false,
         items: result.items,
       });
-      this.notifications.model.setBulk({
-        action: 'out',
-        msg: 'Done!',
-        state: 'success',
-      });
-      this.preloaderWrapper.style.opacity = 0;
+      setTimeout(()=>{
+        this.notifications.model.setBulk({
+          action: 'out',
+          msg: 'Done!',
+          state: 'success',
+        });
+        this.preloaderWrapper.style.opacity = 0;
+      }, 1000);
       setTimeout(()=>{
         this.preloaderWrapper.remove();
-      }, 1000);
+      }, 2000);
     });
   }
   addItem(e) {
@@ -144,16 +146,20 @@ export default class App {
       action: 'in',
       state: 'info',
       msg: 'Saving item...',
+      showProgress: true,
     });
 
     this.store.saveItem(fd)
     .then((response)=>{
       if(!response.code) {
-        this.setModel({ items: response.items, itemEdit: false });
+        // setTimeout(()=>{
+          this.setModel({ items: response.items, itemEdit: false });
+        // }, 500);
         this.notifications.model.setBulk({
           action: 'out',
           state: 'success',
           msg: 'Saved! :)',
+          showProgress: false,
         });
       }
       else {
@@ -162,6 +168,7 @@ export default class App {
           action: 'out',
           state: 'error',
           msg: 'Something went wrong... :(',
+          showProgress: false,
         });
       }
     });
@@ -201,15 +208,49 @@ export default class App {
       action: 'in',
       state: 'info',
       msg: 'Saving item...',
+      showProgress: true,
     });
     this.store.updateItem(fd)
     .then((response)=>{
       if(!response.code) {
-        this.setModel({ items: response.items });
+        this.setModel({ items: response.items, itemEdit: false });
         this.notifications.model.setBulk({
           action: 'out',
           state: 'success',
           msg: 'Saved! :)',
+          showProgress: false,
+        });
+      }
+      else {
+        this.notifications.model.setBulk({
+          autohide: false,
+          action: 'out',
+          state: 'error',
+          msg: 'Something went wrong... :(',
+        });
+      }
+    });
+  }
+  deleteItem(e) {
+    const index = e.currentTarget.parentNode.dataset.index;
+
+    this.notifications.model.setBulk({
+      action: 'in',
+      state: 'info',
+      msg: 'Deleting item...',
+    });
+    this.store.deleteItem({ index: index })
+    .then((response)=>{
+      if(!response.code) {
+        this.setModel({
+          items: response.items,
+          itemEdit: false,
+          itemActive: response.items.length - 1
+        });
+        this.notifications.model.setBulk({
+          action: 'out',
+          state: 'success',
+          msg: 'Deleted item!',
         });
       }
       else {
