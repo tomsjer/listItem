@@ -98,15 +98,15 @@ app.post('/item', upload.single('img'), (req, res)=> {
 });
 
 // EditItem
-app.put('/item', (req, res)=>{
+app.put('/item', upload.single('img'), (req, res)=>{
   try {
     const i = req.body.index;
     const items = req.session.items.slice(0);
     const item = items[i];
 
     // if oldImage != newImage delete oldImage
-    // item[i].img = multer(), shark(), req.file.originalfilename?;
-    item[i].txt = req.body.txt;
+    // item.img = multer(), shark(), req.file.originalfilename?;
+    item.txt = req.body.txt;
     items.splice(i, 1, item);
 
     req.session.items = items;
@@ -126,12 +126,11 @@ app.put('/item', (req, res)=>{
 // Reorder
 app.put('/items', (req, res)=>{
   try {
-    const origin = req.body.was;
-    const target = req.body.now;
     const items = req.session.items.slice(0);
-    const item = items[origin];
-    items.splice(origin, 1, target);
-    // if oldImage != newImage delete oldImage
+    const item = items[req.body.prevIndex];
+    req.body.currIndex = req.body.currIndex === -1 ? items.length - 1 : req.body.currIndex;
+    items.splice(req.body.prevIndex, 1);
+    items.splice(req.body.currIndex, 0, item);
 
     req.session.items = items;
     res.json({

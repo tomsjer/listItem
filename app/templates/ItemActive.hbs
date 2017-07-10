@@ -2,8 +2,8 @@
   {{#if itemEdit}}
     {{#with (lookup items itemActive)}}
       <form data-bind="form" action="return false">
-        <div class="item-active-img">
-          <img src="{{ img }}" alt="{{ txt }}">
+        <div class="item-active-img" style="background-image:url('{{img}}');">
+          {{!-- <img src="{{ img }}" alt="{{ txt }}"> --}}
           <input data-bind="file" name="img" type="file" class="hidden">
           <a data-bind="uploadImg" href="#" class="btn btn-upload"><i class="material-icons">file_upload</i></a>
         </div>

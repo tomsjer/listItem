@@ -31,29 +31,38 @@ export default class ItemActive {
           const reader = new FileReader();
           reader.onload = function readerOnload(evt) {
             const container = document.querySelector(this.container);
-            const img = container.querySelector('img');
-            img.src = evt.target.result;
+            const img = container.querySelector('.item-active-img');
+            img.style.backgroundImage = `url(${evt.target.result})`;
 
           }.bind(this);
           reader.readAsDataURL(file);
         },
         'updateText:change': function updateText(e) {
           // Maybe use input to see realtime change on list?
-          const i = this.model.get('itemActive') | 0;
-          const items = this.model.get('items').slice(0);
-          const item = items[i];
+          // const i = this.model.get('itemActive') | 0;
+          // const items = this.model.get('items').slice(0);
+          // const item = items[i];
 
-          item.txt = e.currentTarget.value;
-          items.splice(i, 1, item);
-          this.model.set('items', items);
+          // item.txt = e.currentTarget.value;
+          // items.splice(i, 1, item);
+          // this.model.set('items', items);
         },
         'startEdit:click': function startEdit() {
-          this.model.set('itemEdit', true);
+          this.emit('startEdit');
         },
         'form:submit': function finishEdit(e) {
           e.preventDefault();
           if(e.target.querySelector('input[type="file"]').files.length) {
-            this.emit('addItem', e);
+            if(this.model.get('itemNew')) {
+              this.emit('addItem', e);
+            }
+            else {
+              this.emit('updateItem', e);
+            }
+
+          }
+          else {
+            console.log('no img.. show error');
           }
         },
       },

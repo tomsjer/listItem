@@ -57,7 +57,7 @@ function init() {
 }
 
 
-window.onload = function() {
+// window.onload = function() {
   /* development */
   if(config.livereload) {
 
@@ -75,4 +75,4 @@ window.onload = function() {
   else {
     init();
   }
-};
+// };

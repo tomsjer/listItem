@@ -1,5 +1,6 @@
 import View from './Views/View.js';
 import Controller from './Controllers/Controller.js';
+import imagesLoaded from '../utils/imagesLoaded.js';
 import Handlebars from 'hbsfy/runtime';
 import dragula from 'dragula';
 
@@ -31,12 +32,19 @@ export default class ItemList {
         'deleteItem:click': function onClick(e) {
           this.emit('deleteItem', e);
         },
+        'startEdit:click': function startEdit() {
+          this.emit('startEdit');
+        },
       },
       template: require('../../templates/ItemList.hbs'),
     });
 
+    this.view.on('afterRender', function loadImages() {
+      const container = document.querySelector(this.container);
+      container.querySelectorAll('img[data-src]').forEach(el => imagesLoaded(el) );
+    });
     // Sortable
-    this.view.on('afterRender',function setDragula() {
+    this.view.on('afterRender', function setDragula() {
 
       const self = this;
       const container = document.querySelector('.item-list .wrapper');
@@ -46,9 +54,9 @@ export default class ItemList {
       drake.on('drop', (el, target, source, sibling)=> {
 
         const prevIndex = el.dataset.index | 0;
-        const currIndex = sibling.classList.contains('gu-mirror') ? -1 : sibling.dataset.index | 0;
+        const currIndex = sibling.classList.contains('gu-mirror') ? -1 : sibling.dataset.index > prevIndex ? (sibling.dataset.index | 0) - 1 : sibling.dataset.index | 0;
 
-        this.emit('reorder', prevIndex, currIndex);
+        self.emit('reorderItem', prevIndex, currIndex);
       });
     });
 

@@ -32,6 +32,7 @@ export default class App {
             'items': items,
             'itemEdit': true,
             'itemActive': items.length - 1,
+            'itemNew': true
           });
         },
       },
@@ -74,16 +75,23 @@ export default class App {
             });
             e.cancelBubble = true;
           },
-          'reorderItem': this.reorderItem,
+          'reorderItem': this.reorderItem.bind(this),
           'startEdit': function startEdit() {
-            console.log(this, self);
-          },
+            this.model.setBulk({
+              'itemEdit': true,
+              'itemNew': false
+            });
+          }.bind(this),
         },
       }),
       new ItemActive({
         model: this.model,
         events: {
-          'addItem': this.addItem.bind(this)
+          'addItem': this.addItem.bind(this),
+          'startEdit': function startEdit() {
+            this.model.set('itemEdit', true);
+          }.bind(this),
+          'updateItem': this.updateItem.bind(this),
         },
       }),
       new Counter({
@@ -130,18 +138,14 @@ export default class App {
   }
   addItem(e) {
 
-    const file = e.target.querySelector('input[type="file"]').files[0];
-    const name = 'img';
-    const txt = e.target.querySelector('textarea').value; // No safe string checks?
-    const fd = new FormData();
+    const fd = this.prepareFormSubmit(e);
 
-    fd.append(name, file);
-    fd.append('txt', txt);
     this.notifications.model.setBulk({
       action: 'in',
       state: 'info',
       msg: 'Saving item...',
     });
+
     this.store.saveItem(fd)
     .then((response)=>{
       if(!response.code) {
@@ -163,12 +167,70 @@ export default class App {
     });
   }
   reorderItem(prevIndex, currIndex) {
-    // Move this to BE
-    const items = self.model.get('items').slice(0);
-    const item = items[prevIndex];
-    currIndex = currIndex === -1 ? items.length - 1 : currIndex;
-    items.splice(prevIndex, 1);
-    items.splice(currIndex, 0, item); // FIXME: when dropping below item substr 1?
-    self.emit('change', 'items', items);
+    this.notifications.model.setBulk({
+      action: 'in',
+      state: 'info',
+      msg: 'Saving list...',
+    });
+    this.store.saveItems(prevIndex, currIndex)
+    .then((response)=>{
+      if(!response.code) {
+        this.setModel({ items: response.items });
+        this.notifications.model.setBulk({
+          action: 'out',
+          state: 'success',
+          msg: 'Saved! :)',
+        });
+      }
+      else {
+        this.notifications.model.setBulk({
+          autohide: false,
+          action: 'out',
+          state: 'error',
+          msg: 'Something went wrong... :(',
+        });
+      }
+    });
+  }
+  updateItem(e) {
+    const fd = this.prepareFormSubmit(e);
+    const index = this.model.get('itemActive');
+    fd.append('index', index);
+
+    this.notifications.model.setBulk({
+      action: 'in',
+      state: 'info',
+      msg: 'Saving item...',
+    });
+    this.store.updateItem(fd)
+    .then((response)=>{
+      if(!response.code) {
+        this.setModel({ items: response.items });
+        this.notifications.model.setBulk({
+          action: 'out',
+          state: 'success',
+          msg: 'Saved! :)',
+        });
+      }
+      else {
+        this.notifications.model.setBulk({
+          autohide: false,
+          action: 'out',
+          state: 'error',
+          msg: 'Something went wrong... :(',
+        });
+      }
+    });
+  }
+  prepareFormSubmit(e) {
+    const file = e.target.querySelector('input[type="file"]').files[0];
+    const name = 'img';
+    const txt = e.target.querySelector('textarea').value; // No safe string checks?
+    const fd = new FormData();
+
+    fd.append(name, file);
+    fd.append('txt', txt);
+
+    return fd;
   }
 }

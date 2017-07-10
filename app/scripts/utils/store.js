@@ -24,6 +24,38 @@ const store = {
       });
     });
   },
+  saveItems:function(prevIndex, currIndex) {
+    return new Promise((resolve, reject)=> {
+      fetch('/items', {
+        method: 'put',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          prevIndex: prevIndex,
+          currIndex: currIndex,
+        }),
+      })
+      .then(response => response.json())
+      .then((result)=>{
+        resolve(result);
+      });
+    });
+  },
+  updateItem:function(fd) {
+    return new Promise((resolve, reject)=> {
+      fetch('/item', {
+        method: 'put',
+        credentials: 'include',
+        body: fd,
+      })
+      .then(response => response.json())
+      .then((result)=>{
+        resolve(result);
+      });
+    });
+  }
 };
 
 export default store;

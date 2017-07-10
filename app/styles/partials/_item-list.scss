@@ -23,6 +23,8 @@ aside.item-list {
       float: left;
       width: 100px;
       height: 100px;
+      background: #555;
+
       img {
         max-width: 100%;
         min-width: 100px;
@@ -31,6 +33,15 @@ aside.item-list {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
+        opacity: 1;
+        transition: opacity 0.25s ease;
+      }
+
+      &.loading {
+        animation: rotate-y 1.25s ease infinite;
+        img {
+          opacity: 0;
+        }
       }
     }
 
