@@ -2,30 +2,26 @@ import View from './Views/View.js';
 import Controller from './Controllers/Controller.js';
 
 export default class ItemActive {
-  constructor(model) {
-    this.model = model;
+  constructor(opts) {
+
+    this.model = opts.model;
+    
     this.view = new View({
       model: this.model,
       container: '.item-active',
       events: {
         'deleteItem:click': function onDelete() {
-          // Move this logic to BE
-          const i = this.model.get('itemActive') | 0;
-          const items = this.model.get('items').slice(0);
-          items.splice(i, 1);
-          this.model.setBulk({
-            'items': items,
-            'itemActive': items.length - 1,
-          });
+          this.emit('deleteItem');
         },
         'uploadImg:click': function uploadImg() {
           const container = document.querySelector(this.container);
           const input = container.querySelector('input[type="file"]');
           input.click();
         },
+        // TODO: set container class (landscape/portrait)
+        // TBD: canvas to allow client-side resize?
         'file:change': function handleFiles(e) {
-          const i = this.model.get('itemActive') | 0;
-          const items = this.model.get('items').slice(0);
+
           const file = e.target.files[0];
           const imageType = /^image\//;
 
@@ -34,9 +30,10 @@ export default class ItemActive {
           }
           const reader = new FileReader();
           reader.onload = function readerOnload(evt) {
-            items[i].img = evt.target.result;
-            this.emit('change', 'items', items);
-            this.emit('fileRead', e);
+            const container = document.querySelector(this.container);
+            const img = container.querySelector('img');
+            img.src = evt.target.result;
+
           }.bind(this);
           reader.readAsDataURL(file);
         },
@@ -48,14 +45,16 @@ export default class ItemActive {
 
           item.txt = e.currentTarget.value;
           items.splice(i, 1, item);
-          // this.model.set('items', items);
+          this.model.set('items', items);
         },
         'startEdit:click': function startEdit() {
           this.model.set('itemEdit', true);
         },
-        'finishEdit:click': function finishEdit() {
-          // TODO: submit changes
-          this.model.set('itemEdit', false);
+        'form:submit': function finishEdit(e) {
+          e.preventDefault();
+          if(e.target.querySelector('input[type="file"]').files.length) {
+            this.emit('addItem', e);
+          }
         },
       },
       template: require('../../templates/ItemActive.hbs'),
@@ -63,23 +62,7 @@ export default class ItemActive {
     this.controller = new Controller({
       model: this.model,
       view: this.view,
-    });
-    this.controller.view.on('fileRead', (e)=>{
-      const file = e.target.files[0];
-      const name = 'img';
-      const fd = new FormData();
-      fd.append(name, file);
-      fd.append('txt', 'txsdasdasd asdsa asd');
-
-      fetch('/item', {
-        method: 'post',
-        credentials: 'include',
-        body: fd,
-      })
-      .then(response => response.json())
-      .then((result)=>{
-        console.log(result);
-      });
+      events: opts.events,
     });
   }
 }

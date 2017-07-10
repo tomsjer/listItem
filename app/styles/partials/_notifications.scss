@@ -1,0 +1,38 @@
+@keyframes slidein {
+  0% {
+    transform: translate3d(-50%, -100%, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0); 
+  }
+}
+
+.notifications {
+  position: fixed;
+  z-index: 2000;
+  padding: 8px 16px;
+  top: 0;
+  left: 50%;
+  transform: translate3d(-50%, 0, 0);
+  background: $fg;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, .2);
+
+  p {
+    font-size: 14px;
+    text-align: center;
+    margin: 0;
+    color: $bg;
+  }
+
+  &.error {
+    background: $error-bg;
+  }
+
+  &.success {
+    background: $success-bg;
+  }
+
+  &.in {
+    animation: slidein 0.5s forwards;
+  }
+}

@@ -15,9 +15,9 @@ Handlebars.registerHelper('isActive', function isActive(options) {
 });
 
 export default class ItemList {
-  constructor(model) {
+  constructor(opts) {
     this.view = new View({
-      model: model,
+      model: opts.model,
       container: '.item-list',
       events: {
         'item:click': function onClick(e) {
@@ -28,31 +28,34 @@ export default class ItemList {
             'itemEdit': false,
           });
         },
+        'deleteItem:click': function onClick(e) {
+          this.emit('deleteItem', e);
+        },
       },
       template: require('../../templates/ItemList.hbs'),
     });
-    this.view.on('afterRender', function setDragula() {
+
+    // Sortable
+    this.view.on('afterRender',function setDragula() {
+
       const self = this;
       const container = document.querySelector('.item-list .wrapper');
       const drake = dragula([container], {
         mirrorContainer: container,
       });
       drake.on('drop', (el, target, source, sibling)=> {
-        
-        const items = self.model.get('items').slice(0);
-        const was = el.dataset.index | 0;
-        const now = sibling.classList.contains('gu-mirror') ? items.length - 1 : sibling.dataset.index | 0;
 
-        // Move this to BE
-        const item = items[was];
-        items.splice(was, 1);
-        items.splice(now, 0, item); // FIXME: when dropping below item substr 1?
-        self.emit('change', 'items', items);
+        const prevIndex = el.dataset.index | 0;
+        const currIndex = sibling.classList.contains('gu-mirror') ? -1 : sibling.dataset.index | 0;
+
+        this.emit('reorder', prevIndex, currIndex);
       });
     });
+
     this.controller = new Controller({
-      model: model,
+      model: opts.model,
       view: this.view,
+      events: opts.events
     });
   }
 }

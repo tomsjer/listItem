@@ -10,7 +10,7 @@ function init() {
         itemActive: 0,
         itemEdit: false,
         views: [],
-        loading: true,
+        loading: false,
         showTooltip: true,
       },
     },
@@ -56,20 +56,23 @@ function init() {
   }
 }
 
-/* development */
-if(config.livereload) {
 
-  const wsServer = `ws://${config.ip}:${config.port}`;
-  const WsConnection = require('./wsconnection');
-  const ws = new WsConnection({
-    wsServer: wsServer,
-  });
-  ws.init()
-  .then(()=>{
+window.onload = function() {
+  /* development */
+  if(config.livereload) {
+
+    const wsServer = `ws://${config.ip}:${config.port}`;
+    const WsConnection = require('./wsconnection');
+    const ws = new WsConnection({
+      wsServer: wsServer,
+    });
+    ws.init()
+    .then(()=>{
+      init();
+    });
+
+  }
+  else {
     init();
-  });
-
-}
-else {
-  init();
-}
+  }
+};

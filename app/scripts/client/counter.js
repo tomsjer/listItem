@@ -8,8 +8,8 @@ Handlebars.registerHelper('addOne', function(options) {
 });
 
 export default class Counter {
-  constructor(model) {
-    this.model = model;
+  constructor(opts) {
+    this.model = opts.model;
     this.view = new View({
       model: this.model,
       container: '.counter',
