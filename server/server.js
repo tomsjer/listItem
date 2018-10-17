@@ -77,7 +77,7 @@ app.post('/item', upload.single('img'), (req, res)=> {
   try {
     sharp(req.file.buffer)
     .resize(320, 320)
-    .toFile('uploads/' + req.file.originalname, function(err) {
+    .toFile(path.join(__dirname,'uploads/' + req.file.originalname) , function(err) {
       if(err) throw err;
 
       req.session.items.push({
@@ -91,6 +91,7 @@ app.post('/item', upload.single('img'), (req, res)=> {
     });
   }
   catch(err) {
+    console.log(err)
     res.json({
       code: 1,
       error: err,
