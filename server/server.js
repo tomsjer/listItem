@@ -81,7 +81,7 @@ app.post('/item', upload.single('img'), (req, res)=> {
       if(err) throw err;
 
       req.session.items.push({
-        img: 'images/' + req.file.originalname,
+        img: '/images/' + req.file.originalname,
         txt: req.body.txt,
       });
       res.json({
