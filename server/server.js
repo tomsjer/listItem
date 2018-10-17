@@ -135,7 +135,7 @@ app.put('/item', upload.single('img'), (req, res)=>{
         items: req.session.items,
       });
     }
-    
+
   }
   catch(e) {
     res.json({
@@ -194,7 +194,7 @@ app.delete('/item', (req, res)=> {
 
 const server = httpMod.createServer(app);
 
-server.listen(config.port, config.ip, function listening() {
+server.listen(config.port, function listening() {
   logger.info(`\n______________________________________________________\n\n http://${server.address().address}:${server.address().port}...\n______________________________________________________\n`);
   if(typeof process.send !== 'undefined') {
     process.send({ ready: true });
