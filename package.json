@@ -1,7 +1,7 @@
 {
-  "name": "stl-test",
+  "name": "listitems",
   "version": "1.0.0",
-  "description": "FE test",
+  "description": "ListItems",
   "dependencies": {
     "body-parser": "^1.17.2",
     "dragula": "^3.7.2",
@@ -34,7 +34,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_ENV=development gulp serve",
+    "start": "node server/server.js",
     "serve": "gulp serve",
     "build": "gulp"
   },
