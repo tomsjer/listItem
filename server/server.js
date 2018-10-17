@@ -11,6 +11,7 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
 const multer = require('multer');
+const path = require('path');
 // const upload = multer({ dest: 'uploads/' });
 const upload = multer();
 const sharp = require('sharp');
@@ -20,9 +21,9 @@ const sharp = require('sharp');
  * Express
  *
  */
-
-app.use(express.static(config.publicDir, { index: false }));
-app.use('/images', express.static('uploads'));
+const p = path.join(__dirname, '../public');
+app.use(express.static(p));
+app.use('/images', express.static(path.join(__dirname,'uploads')));
 app.use(session({
   secret: '$eCuRiTy',
   resave: false,
@@ -36,9 +37,10 @@ app.get('/', (req, res)=>{
     req.session.items = [];
   }
   res.sendFile('main.html', {
-    root: `${ __dirname }/../${ config.publicDir }`,
+    root: path.join(__dirname,`../${ config.publicDir }`),
   });
 });
+
 
 // Set 404 error for everything other than main.html
 // Not working, not sure why.
